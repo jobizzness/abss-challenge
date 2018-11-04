@@ -39,7 +39,7 @@ class Item extends Model
     {
         return $this->attributes['tax_value'] ?: $this->defaultTax;
     }
-    
+
     /**
      *  Setup model event hooks
      */

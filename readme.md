@@ -1,65 +1,72 @@
-<p align="center"><img src="https://laravel.com/assets/img/components/logo-laravel.svg"></p>
+# PHP Challenge API spec
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
 
-## About Laravel
+## Overview
+This repository contains an API definition. Your task is to build the three API endpoints based on the "API scenario" outlined below.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel attempts to take the pain out of development by easing common tasks used in the majority of web projects, such as:
+The result must be coded in PHP. You can choose what framework and tools you want to use. At ABSS, we have applications built in Phalcon and Laravel. We also use Angular 1 and Vue.JS for our frontend.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Deliverables
+A public BitBucket, Github or Gitlab repository containing all the source code required to run the solution.
 
-Laravel is accessible, yet powerful, providing tools needed for large, robust applications.
+You may choose to include:
 
-## Learning Laravel
+*	Unit tests for your solution
+*	Installation instructions (composer etc.)
+*	Testing instructions
+*	Deployment instructions (e.g. a docker image)
+*	Docmentation 
+*	Any other features or examples that you would like to show us.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of any modern web application framework, making it a breeze to get started learning the framework.
+You may also choose to setup any CI/CD services and/or deploy your solution to a service like heroku (or your server of choice). Please note this is **not** a core requirement and is an option for you to show us your skills.
 
-If you're not in the mood to read, [Laracasts](https://laracasts.com) contains over 1100 video tutorials on a range of topics including Laravel, modern PHP, unit testing, JavaScript, and more. Boost the skill level of yourself and your entire team by digging into our comprehensive video library.
+Please only spend 2-3 hours on this solution, and focus on the skills you want to show us. You may choose to do unit/integration/contract testing or you may decide that automation is more important.
 
-## Laravel Sponsors
+## The API Scenario
+An Open API spec is available at https://bitbucket.org/abss-engineering/php-challenge/. You You need to implement all three API endpoints defined by the spec. The app you�re building is a simple invoice calculator for different taxes.
 
-We would like to extend our thanks to the following sponsors for helping fund on-going Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell):
+### Ping
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
+This endpoint response is used to see if everything is working. It should check:
+*	The application is correctly configured.
+*	Any data storage (database, files etc) is working correctly.
 
-## Contributing
+### Items
+This endpoint should return a list of items. We�ve provided sample data in this repository (`data/`). Make sure that:
+*	Numbers are displayed to the correct decimal places
+*	The schema matches the API definition
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### Invoice
+When you POST to this endpoint, the response should include a completed invoice including calculations. Make sure that
+*	Numbers are displayed to the correct decimal places
+*	The schema matches the API definition
 
-## Security Vulnerabilities
+You do not have to save or persist the invoice in a database.
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### A note on calculations:
+As a final step, make sure that your invoice calculations follow the following rules:
 
-## License
+*	A discount can be no less than 0%, and no greater than 50%
+*	Calculate taxes according to the following statement:
+*	Calculate each line tax exclusive
+	* 	Determine the tax due for each line rounded to 4 decimal places
+	*	The line total should be rounded to 2 decimal places
+	*	The total tax due should be the total of all taxes, rounded to 2 decimal places
+*	The invoice total should be the sum of the lines (exclusive) + the tax total
+*	The invoice response should use the inventory names and prices and ignore all nullable fields POST�ed to the API.
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+
+### The API Spec
+The full API documentation is available at [https://abss-engineering-php-challenge.netlify.com](https://abss-engineering-php-challenge.netlify.com)
+
+JSON Schemas are located in the `schemas/` directory and define the API request and response body. You may find these useful for validation purposes. We publish these schemas to the documentation URL.
+
+In case you're curious, we run `npm run publish` to generate and publish the API documentation and schemas to netlify.
+
+For more information about how this API specification was written, see [API.md](API.md)
+
+## Questions?
+If you have any questions about completing this challenge, please email the hiring manager (you'll have this information in your email).
+
+
+
