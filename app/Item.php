@@ -47,7 +47,7 @@ class Item extends Model
     {
         parent::boot();
         self::creating(function ($item) {
-            $item->uuid = (string) Uuid::generate(4);
+            $item->id = (string) Uuid::generate(4);
         });
     }
 
