@@ -4,6 +4,8 @@ use Illuminate\Database\Seeder;
 
 class ItemSeeder extends Seeder
 {
+
+
     /**
      * Run the database seeds.
      *
@@ -11,6 +13,12 @@ class ItemSeeder extends Seeder
      */
     public function run()
     {
-        //
+        $data = [
+
+        ];
+
+        foreach ($data as $item){
+            Item::create();
+        }
     }
 }

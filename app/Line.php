@@ -12,7 +12,7 @@ class Line
 
     public function __construct($attributes = [])
     {
-        
+
     }
 
 }
