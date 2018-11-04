@@ -14,10 +14,13 @@ class ItemController extends Controller
     public function index()
     {
         try{
+
             $items = Item::all();
 
         }catch(\Exception $exception){
+
             return $this->respondWithError('Failed when retrieving records from storage');
+
         }
 
         return Response::json($items->toArray(), 200);
