@@ -11,6 +11,10 @@ class InvoiceController extends Controller
 {
     protected $lines = [];
 
+    /**
+     * @param Request $request
+     * @return mixed
+     */
     public function make(Request $request)
     {
 
@@ -26,10 +30,10 @@ class InvoiceController extends Controller
             ]);
         }catch (\Exception $exception){
 
-            return $this->respondWithError('Failed when retrieving records from storage');
+            return $this->respondWithError('Failed while creating line items');
         }
 
-        $response = $this->dispatchNow(new InvoiceCalculation($this->lines));
+        return $this->dispatchNow(new InvoiceCalculation($this->lines));
 
 
     }

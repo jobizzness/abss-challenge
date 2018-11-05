@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Item;
 use Illuminate\Console\Command;
 
 class InvoiceCalculation extends Command
@@ -19,21 +20,17 @@ class InvoiceCalculation extends Command
      * @var string
      */
     protected $description = 'Command description';
-    /**
-     * @var array
-     */
-    private $lines;
+    private $items;
 
     /**
      * Create a new command instance.
      *
-     * @param array $lines
+     * @param $items
      */
-    public function __construct($lines = [])
+    public function __construct($items)
     {
         parent::__construct();
-
-        $this->lines = $lines;
+        $this->items = collect($items);
     }
 
     /**
@@ -43,7 +40,84 @@ class InvoiceCalculation extends Command
      */
     public function handle()
     {
-        //you have passed me an array of lines
-        dd($this->lines);
+        $calculatedLines = $this->items->transform(function($line){
+
+            $item = Item::findOrFail($line->id);
+
+           return [
+               'name'           => $item->name,
+               'quantity'       => $line->getQuantity(),
+               'discount'       => $line->getDiscount(),
+               'tax_rate'       => $item->tax,
+               'total'          => $this->getLineTotal($item->price, $line->getDiscount()),
+               'tax_due'        => $this->getLineTax($item->tax, $item->price)
+           ];
+        });
+
+        return [
+            'lines'         => $calculatedLines,
+            'total'         => $this->getInvoiceTotal($calculatedLines),
+            'tax'           => $this->getInvoiceTax($calculatedLines)
+
+        ];
     }
+
+    /**
+     * *	A discount can be no less than 0%, and no greater than 50%
+     *	Calculate taxes according to the following statement:
+     *	Calculate each line tax exclusive
+     * 	Determine the tax due for each line rounded to 4 decimal places
+     *	The line total should be rounded to 2 decimal places
+     *	The total tax due should be the total of all taxes, rounded to 2 decimal places
+     *	The invoice total should be the sum of the lines (exclusive) + the tax total
+     *	The invoice response should use the inventory names and prices and ignore all nullable fields POST�ed to the API.
+     */
+    public function hola()
+    {
+
+    }
+
+    /**
+     * @param int $price
+     * @param int $discount
+     * @return float|int
+     */
+    private function getLineTotal($price = 0, $discount = 0)
+    {
+        $discountValue = $price * $discount/100;
+
+        return number_format($price - $discountValue,2);
+
+    }
+
+    /**
+     * @param int $tax
+     * @param int $price
+     * @return float|int
+     */
+    private function getLineTax($tax = 0, $price = 0)
+    {
+        return number_format($price * $tax/100, 4);
+    }
+
+    /**
+     * @param $calculatedLines
+     * @return string
+     */
+    private function getInvoiceTotal($calculatedLines)
+    {
+            $total = $calculatedLines->sum('total') + $this->getInvoiceTax($calculatedLines);
+            return number_format($total, 2);
+    }
+
+    /**
+     * @param $calculatedLines
+     * @return string
+     */
+    private function getInvoiceTax($calculatedLines)
+    {
+        return number_format($calculatedLines->sum('tax_due'), 2);
+    }
+
+
 }
