@@ -58,23 +58,7 @@ class InvoiceCalculation extends Command
             'lines'         => $calculatedLines,
             'total'         => $this->getInvoiceTotal($calculatedLines),
             'tax'           => $this->getInvoiceTax($calculatedLines)
-
         ];
-    }
-
-    /**
-     * *	A discount can be no less than 0%, and no greater than 50%
-     *	Calculate taxes according to the following statement:
-     *	Calculate each line tax exclusive
-     * 	Determine the tax due for each line rounded to 4 decimal places
-     *	The line total should be rounded to 2 decimal places
-     *	The total tax due should be the total of all taxes, rounded to 2 decimal places
-     *	The invoice total should be the sum of the lines (exclusive) + the tax total
-     *	The invoice response should use the inventory names and prices and ignore all nullable fields POST�ed to the API.
-     */
-    public function hola()
-    {
-
     }
 
     /**

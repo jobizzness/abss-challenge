@@ -17,20 +17,16 @@ class InvoiceController extends Controller
      */
     public function make(Request $request)
     {
+        $request->validate(['lines' => 'required']);
 
         try{
-            $this->createLines([
-                ['id'       => '90192182-2f83-40cb-b324-ce4a43dd0024',
-                    'quantity'      => 1,
-                    'discount'       =>  17],
 
-                ['id'       => 'c2f5b5b6-d85d-41bb-9651-bea30cc880b0',
-                    'quantity'      => 2,
-                    'discount'       =>  5],
-            ]);
+            $this->createLines($request->lines);
+
         }catch (\Exception $exception){
 
             return $this->respondWithError('Failed while creating line items');
+
         }
 
         return $this->dispatchNow(new InvoiceCalculation($this->lines));

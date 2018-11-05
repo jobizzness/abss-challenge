@@ -19,4 +19,4 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('/item', 'ItemController@index');
 
-Route::get('/invoice', 'InvoiceController@make');
+Route::post('/invoice', 'InvoiceController@make');
